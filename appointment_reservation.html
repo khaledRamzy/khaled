@@ -72,11 +72,18 @@
 		<input type="button" class="submit_btn" value="submit" name="">
 </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
   <script type="text/javascript">
   	
   	//get list of free slots
+  	// download sheet to get options list
+  	//https://docs.google.com/spreadsheet/ccc?key=1UKlY3zSDkNfVf9e0w3eYSaM8b2ft6RG3Y7rHviaVbBA&output=xls
 
-  	getSlots();
+  	const sheet_url = "https://docs.google.com/spreadsheet/ccc?key=1UKlY3zSDkNfVf9e0w3eYSaM8b2ft6RG3Y7rHviaVbBA&output=xlsx"
+  	
+  	getExcelFromUrl(sheet_url)
+
 
   	document.querySelector('.submit_btn').addEventListener('click', function(event){
   		event.preventDefault();
@@ -87,6 +94,48 @@
   		window.open(`https://docs.google.com/forms/d/e/1FAIpQLScqCGZIb3RpTHFCqbHHUlwzLAi7_INyYDi9GvjSDB9cI9lLxw/viewform?usp=pp_url&entry.494977624=${selectedInput}`)
 
   	})
+
+
+async function getExcelFromUrl(url)
+{
+	let request = await fetch(url,{method: 'GET',mode: 'no-cors'});
+	let file = await request.arrayBuffer();
+	readFile(file)
+}
+
+function readFile(){
+
+
+	var ExcelToJSON = function() {
+
+  this.parseExcel = function(file) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      var data = e.target.result;
+      var workbook = XLSX.read(data, {
+        type: 'binary'
+      });
+
+      workbook.SheetNames.forEach(function(sheetName) {
+        // Here is your object
+        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+        var json_object = JSON.stringify(XL_row_object);
+        console.log(json_object);
+
+      })
+
+    };
+
+    reader.onerror = function(ex) {
+      console.log(ex);
+    };
+
+    reader.readAsBinaryString(file);
+  };
+};
+
+}
 
 async function getSlots()
 {
@@ -121,7 +170,6 @@ async function getSlots()
       return false;
   }
 }
-
 
   </script>
   </body>
