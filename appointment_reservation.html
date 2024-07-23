@@ -100,6 +100,7 @@ async function getExcelFromUrl(url)
 {
 	let request = await fetch(url,{method: 'GET',mode: 'no-cors'});
 	let file = await request.arrayBuffer();
+	console.log(file);
 	readFile(file)
 }
 
