@@ -82,7 +82,7 @@
 
   	const sheet_url = "https://docs.google.com/spreadsheet/ccc?key=1UKlY3zSDkNfVf9e0w3eYSaM8b2ft6RG3Y7rHviaVbBA&output=xlsx"
   	
-  	getExcelFromUrl(sheet_url)
+  	getData()
 
 
   	document.querySelector('.submit_btn').addEventListener('click', function(event){
@@ -96,53 +96,38 @@
   	})
 
 
-async function getExcelFromUrl(url)
-{
-	//let request = await fetch(url,{method: 'GET',mode: 'no-cors'});
-	//let arraybuffer = await request.arrayBuffer();
-	//console.log(arraybuffer);
-	//readFile(arraybuffer)
 
-	var xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-        console.log('success', this.response);
-	readFile(this.response)
-    }
-};
-xhr.responseType="arraybuffer";
+function getData() {
+xhr = new XMLHttpRequest();
 xhr.open('GET', 'https://docs.google.com/spreadsheet/ccc?key=1UKlY3zSDkNfVf9e0w3eYSaM8b2ft6RG3Y7rHviaVbBA&output=xlsx', true);
-xhr.send(null);
-}
+//xhr.open('GET', 'exchange.xlsx', true);
+xhr.responseType = 'arraybuffer';
 
-function readFile(arrayBuffer){
+xhr.addEventListener('load', function() {
 
-    var reader = new FileReader();
+            arraybuffer = xhr.response;
 
-    reader.onload = function(e) {
-      /* convert data to binary string */
-        var data = new Uint8Array(arrayBuffer);
-      var workbook = XLSX.read(data, {
-        type: 'binary'
-      });
+            // /* convert data to binary string */
+            arraybuffer = new Uint8Array(arraybuffer);
 
-      workbook.SheetNames.forEach(function(sheetName) {
-        // Here is your object
-        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
-        var json_object = JSON.stringify(XL_row_object);
-        console.log(json_object);
+            var workbook = XLSX.read(arraybuffer, {
+			        type: 'buffer'
+			      });
 
-      })
+			      workbook.SheetNames.forEach(function(sheetName) {
+			        // Here is your object
+			        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+			        var json_object = JSON.stringify(XL_row_object);
+			        
+			        console.log(json_object);
 
-    };
+			        // fill form accordingly
 
-    reader.onerror = function(ex) {
-      console.log(ex);
-    };
+			      })
 
-    reader.readAsBinaryString(arrayBuffer);
-  
+    });
 
+    xhr.send(null);
 }
 
 
