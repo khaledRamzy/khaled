@@ -98,10 +98,20 @@
 
 async function getExcelFromUrl(url)
 {
-	let request = await fetch(url,{method: 'GET',mode: 'no-cors'});
-	let arraybuffer = await request.arrayBuffer();
-	console.log(arraybuffer);
-	readFile(arraybuffer)
+	//let request = await fetch(url,{method: 'GET',mode: 'no-cors'});
+	//let arraybuffer = await request.arrayBuffer();
+	//console.log(arraybuffer);
+	//readFile(arraybuffer)
+
+	var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function () {
+    if (this.readyState === 4 && this.status === 200) {
+        //console.log('success', this.responseText.length);
+	readFile(this.responseText)
+    }
+};
+xhr.open('GET', 'https://docs.google.com/spreadsheet/ccc?key=1UKlY3zSDkNfVf9e0w3eYSaM8b2ft6RG3Y7rHviaVbBA&output=xlsx', true);
+xhr.send(null);
 }
 
 function readFile(arrayBuffer){
