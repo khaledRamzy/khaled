@@ -38,66 +38,9 @@ https://docs.google.com/forms/d/e/1FAIpQLSfhHjTXiq36oXQsF4mi1KoybpgRpFgtsNDGZ7QT
 		    <input type="number" class="form-control" id="entry.585382209" name="entry.585382209" placeholder="mobile">
 		  </div>
 		</div>
-
-    	<table class="table table-success table-striped">
-    		<thead>
-    			<th>12-8-2024 / Session</th>
-    			<th>10:00 AM - 11:00 AM</th>
-    			<th>11:30 AM - 12:30 PM</th>
-    			<th>1:00 PM - 2:00 PM</th>
-    			<th>2:30 PM - 3:30 PM</th>
-    			<th>4 PM - 5 PM</th>
-    		</thead>
-    		<tbody>
-    			<tr>
-    				<th>Assessor 1</th>
-    				<td>
-    					<input type="radio" name="entry.571319333" 
-    					value="12-8-2024 | Assessor: 1 | session: 10:00 AM - 11:00 AM"/>
-    				</td>
-    				<td>
-    					<input type="radio" name="entry.571319333" 
-    					value="12-8-2024 | Assessor: 1 | session: 11:30 AM - 12:30 PM"/>
-    				</td>
-    				<td>
-    					<input type="radio" name="entry.571319333" 
-    					value="12-8-2024 | Assessor: 1 | session: 1:00 PM - 2:00 PM"/>
-    				</td>
-    				<td>
-    					<input type="radio" name="entry.571319333" 
-    					value="12-8-2024 | Assessor: 1 | session: 2:30 PM - 3:30 PM"/>
-    				</td>
-    				<td>
-    					<input type="radio" name="entry.571319333" 
-    					value="12-8-2024 | Assessor: 1 | session: 4 PM - 5 PM"/>
-    				</td>
-    			</tr>
-    			<tr>
-    				<th>Assessor 2</th>
-    				<td>
-    					<input type="radio" name="entry.571319333" 
-    					value="12-8-2024 | Assessor: 1 | session: 10:00 AM - 11:00 AM"/>
-    				</td>
-    				<td>
-    					<input type="radio" name="entry.571319333" 
-    					value="12-8-2024 | Assessor: 1 | session: 11:30 AM - 12:30 PM"/>
-    				</td>
-    				<td>
-    					<input type="radio" name="entry.571319333" 
-    					value="12-8-2024 | Assessor: 1 | session: 1:00 PM - 2:00 PM"/>
-    				</td>
-    				<td>
-    					<input type="radio" name="entry.571319333" 
-    					value="12-8-2024 | Assessor: 1 | session: 2:30 PM - 3:30 PM"/>
-    				</td>
-    				<td>
-    					<input type="radio" name="entry.571319333" 
-    					value="12-8-2024 | Assessor: 1 | session: 4 PM - 5 PM"/>
-    				</td>
-    			</tr>
-    			
-    		</tbody>
-		</table>
+		<div class="daysList">
+    	
+		</div>
 		<input type="button" class="submit_btn" value="submit" name="">
 </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -132,7 +75,6 @@ https://docs.google.com/forms/d/e/1FAIpQLSfhHjTXiq36oXQsF4mi1KoybpgRpFgtsNDGZ7QT
 function getData() {
 xhr = new XMLHttpRequest();
 xhr.open('GET', 'https://docs.google.com/spreadsheet/ccc?key=1UKlY3zSDkNfVf9e0w3eYSaM8b2ft6RG3Y7rHviaVbBA&output=xlsx', true);
-//xhr.open('GET', 'exchange.xlsx', true);
 xhr.responseType = 'arraybuffer';
 
 xhr.addEventListener('load', function() {
@@ -146,24 +88,141 @@ xhr.addEventListener('load', function() {
 			        type: 'buffer'
 			      });
 
+            let counter = 0;
+            let optionsJson = [];
+            let mainJson = [];
+
 			      workbook.SheetNames.forEach(function(sheetName) {
 			        // Here is your object
 			        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
 			        var json_object = JSON.stringify(XL_row_object);
 			        
-			        console.log(json_object);
+			        if(counter==0)
+			        {
+			        	mainJson = JSON.parse(json_object);
+			        }
+			        else if(counter==1)
+			        {
+			        	optionsJson = JSON.parse(json_object);
+			        }
+
+			        counter++
+			        //console.log(json_object);
 
 			      })
 
 			      // fill form accordingly
 
-
+			      appendData(optionsJson);
 
     });
 
     xhr.send(null);
 }
 
+
+function appendData(jsonArray){
+
+
+	let dates = jsonArray.map(e=>e.options.split('|')[0].trim());
+			dates = dates.filter(onlyUnique);
+
+			dates.forEach(date=>{
+
+			const dateArray=date.split("-");
+			const day=dateArray[0].trim();
+			const month=dateArray[1].trim();
+			const year=dateArray[2].trim();	
+
+			let assessors =[];
+
+			jsonArray.forEach(e=>{
+
+
+				if(e.day.trim() == day && e.month.trim() == month && e.year.trim() == year)
+				{
+					assessors.push(e.assessors)
+				}
+			});
+			assessors = assessors.filter(onlyUnique);
+
+			//add array to store free sessions for each user
+			assessors = assessors.map(item=>{
+				return {"name":item,"sessions":[]}
+			});
+
+			//console.log(assessors);
+
+			jsonArray.forEach(e=>{
+
+				if(e.day.trim() == day && e.month.trim() == month && e.year.trim() == year)
+				{
+					assessors.forEach(o=>{
+						if(o.name == e.assessors)
+							o.sessions.push({"sname":e.session,"status":e.status});
+					})
+				}
+			});
+
+			appendDayBlock(date,assessors);
+
+			})
+}
+
+function appendDayBlock(date,assessors){
+	
+	console.log(date,assessors);
+
+	let tableHeader = `
+		    	<table class="table table-success table-striped">
+    		<thead>
+    			<th>${date}</th>
+    			<th>10:00 AM - 11:00 AM</th>
+    			<th>11:30 AM - 12:30 PM</th>
+    			<th>1:00 PM - 2:00 PM</th>
+    			<th>2:30 PM - 3:30 PM</th>
+    			<th>4 PM - 5 PM</th>
+    		</thead>
+    		<tbody>`;
+
+  const tableEnd = `</tbody>
+		</table>`;
+
+		assessors.forEach(e=>{
+
+			tableHeader = `${tableHeader} <tr>
+    				<th>${e.name}</th>`
+
+			let tds = 
+			e.sessions.map(s=>{
+
+				if(s.status=='Free')
+					return `<td>
+    						<input type="radio" name="entry.571319333" 
+    						value="${date} | Assessor: ${e.name} | session: ${s.sname}"/>
+    					</td>`;
+    		else
+    				return `<td>
+    					Reserved
+    				</td>`;
+
+			}).join('');
+
+			tableHeader = `${tableHeader} ${tds}`;
+
+		})
+
+		tableHeader = `${tableHeader} ${tableEnd}`; 		
+
+	document.querySelector(".daysList").insertAdjacentHTML('beforeend',tableHeader);
+
+
+}
+
+
+function onlyUnique(value, index, array) {
+  return array.indexOf(value) === index;
+}
 
 
   </script>
