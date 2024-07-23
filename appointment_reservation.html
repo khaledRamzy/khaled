@@ -9,32 +9,31 @@
   <body>
 <div class="container">
     <br>
-    
     <h2>Saville Assessment</h2>
     <br>
 
 		<div class="row mb-3">
-		  <label for="colFormLabel" class="col-sm-2 col-form-label">Name</label>
+		  <label for="entry.419549455" class="col-sm-2 col-form-label">Name</label>
 		  <div class="col-sm-10">
-		    <input type="text" class="form-control" id="colFormLabel" placeholder="name">
+		    <input type="text" class="form-control" id="entry.419549455" name="entry.419549455" placeholder="name">
 		  </div>
 		</div>
 		<div class="row mb-3">
-		  <label for="colFormLabel" class="col-sm-2 col-form-label">ID</label>
+		  <label for="entry.1183040921" class="col-sm-2 col-form-label">ID</label>
 		  <div class="col-sm-10">
-		    <input type="number" class="form-control" id="colFormLabel" placeholder="id">
+		    <input type="number" class="form-control" id="entry.1183040921" name="entry.1183040921" placeholder="id">
 		  </div>
 		</div>
 		<div class="row mb-3">
-		  <label for="colFormLabel" class="col-sm-2 col-form-label">Email</label>
+		  <label for="entry.59009024" class="col-sm-2 col-form-label">Email</label>
 		  <div class="col-sm-10">
-		    <input type="email" class="form-control" id="colFormLabel" placeholder="email">
+		    <input type="email" class="form-control" id="entry.59009024" name="entry.59009024" placeholder="email">
 		  </div>
 		</div>
 		<div class="row mb-3">
-		  <label for="colFormLabel" class="col-sm-2 col-form-label">Mobile</label>
+		  <label for="entry.585382209" class="col-sm-2 col-form-label">Mobile</label>
 		  <div class="col-sm-10">
-		    <input type="number" class="form-control" id="colFormLabel" placeholder="mobile">
+		    <input type="number" class="form-control" id="entry.585382209" name="entry.585382209" placeholder="mobile">
 		  </div>
 		</div>
 
@@ -51,19 +50,19 @@
     			<tr>
     				<th>Trainer 1 - Location a</th>
     				<td>
-    					<input type="radio" name="entry.494977624" value="date_22_7_trainer_1_location_a_session_1"/>
+    					<input type="radio" name="entry.571319333" value="date_22_7_trainer_1_location_a_session_1"/>
     				</td>
     				<td>
-    					<input type="radio" name="entry.494977624" value="date_22_7_trainer_1_location_a_session_2"/>
+    					<input type="radio" name="entry.571319333" value="date_22_7_trainer_1_location_a_session_2"/>
     				</td>
     				<td>
-    					<input type="radio" name="entry.494977624" value="date_22_7_trainer_1_location_a_session_3"/>
+    					<input type="radio" name="entry.571319333" value="date_22_7_trainer_1_location_a_session_3"/>
     				</td>
     				<td>
-    					<input type="radio" name="entry.494977624" value="date_22_7_trainer_1_location_a_session_4"/>
+    					<input type="radio" name="entry.571319333" value="date_22_7_trainer_1_location_a_session_4"/>
     				</td>
     				<td>
-    					<input type="radio" name="entry.494977624" value="date_22_7_trainer_1_location_a_session_5"/>
+    					<input type="radio" name="entry.571319333" value="date_22_7_trainer_1_location_a_session_5"/>
     				</td>
     			</tr>
     			
@@ -76,9 +75,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
   <script type="text/javascript">
   	
-  	//get list of free slots
-  	// download sheet to get options list
-  	//https://docs.google.com/spreadsheet/ccc?key=1UKlY3zSDkNfVf9e0w3eYSaM8b2ft6RG3Y7rHviaVbBA&output=xls
+//https://docs.google.com/forms/d/e/1FAIpQLSfhHjTXiq36oXQsF4mi1KoybpgRpFgtsNDGZ7QTNuH-yPopig/viewform?usp=pp_url&entry.419549455=name&entry.1183040921=id&entry.59009024=email&entry.585382209=mobile&entry.571319333=18-7-2024+slot+(1)
 
   	const sheet_url = "https://docs.google.com/spreadsheet/ccc?key=1UKlY3zSDkNfVf9e0w3eYSaM8b2ft6RG3Y7rHviaVbBA&output=xlsx"
   	
@@ -88,10 +85,10 @@
   	document.querySelector('.submit_btn').addEventListener('click', function(event){
   		event.preventDefault();
 
-  		let selectedInput = document.querySelector('[name="entry.494977624"]:checked').value;
+  		let selectedInput = document.querySelector('[name="entry.571319333"]:checked').value;
 
   		if(selectedInput!='' && selectedInput!='undefined')
-  		window.open(`https://docs.google.com/forms/d/e/1FAIpQLScqCGZIb3RpTHFCqbHHUlwzLAi7_INyYDi9GvjSDB9cI9lLxw/viewform?usp=pp_url&entry.494977624=${selectedInput}`)
+  		window.open(`https://docs.google.com/forms/d/e/1FAIpQLSfhHjTXiq36oXQsF4mi1KoybpgRpFgtsNDGZ7QTNuH-yPopig/viewform?usp=pp_url&entry.571319333=${selectedInput}`)
 
   	})
 
@@ -121,9 +118,11 @@ xhr.addEventListener('load', function() {
 			        
 			        console.log(json_object);
 
-			        // fill form accordingly
-
 			      })
+
+			      // fill form accordingly
+
+
 
     });
 
